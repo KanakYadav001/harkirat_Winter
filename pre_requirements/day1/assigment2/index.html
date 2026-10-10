@@ -15,18 +15,86 @@
             width: 100%;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif 
         }
+        img{
+            width: 20px;
+            height: fit-content;
+        }
+        .line{
+            width: 50px;
+            height: 4px;
+            background-color: rgb(168, 167, 167);
+            margin-left: 10px;
+            border-radius: 10px;
+        }
+        input{
+            padding: 10px 10px ;
+            border: 1px solid #292542;
+            border-radius: 7px;
+        }
+        .BI{
+            width: 150px;
+        }
     </style>
 </head>
 <body>
-    <div>
-        <div>
+    <div style="display: flex; ">
+        <div style=" flex: 1; background-color:#1C1C1C; color: white; height: 100vh">
+            <div style="padding: 40px; display: flex; flex-direction: column; gap: 2rem; margin-top: 20px;">
         <h3>IIElevenLabs</h3>
          
           <h1>Contact our sales team</h1>
 
-          <p><img src="" alt=""> Custom pricing and ele</p>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+          <p style="display: flex; align-items: center; gap: 5px;" ><img src="./rocket.webp" alt="img"> Custom pricing and elevated concurrency </p>
+          <p style="display: flex; align-items: center; gap: 5px;" ><img src="./protect.webp" alt="img"> SOC 2, ISO 27001, HIPAA, GDPR, & regional data residency </p>
+          <p style="display: flex; align-items: center; gap: 5px;" ><img src="./comapny.webp" alt="img"> Loved by 7.5M+ creators and enterprises </p>
+</div>
+
+          <p style="margin-top: 100px;" >Trusted by 10,000+ leading bussinesses</p>
+
+      <div style="display: flex; gap: 20px; width: auto; justify-content: space-between; align-items: center;">
+        <img class="BI" src="./cisco.webp" alt="img">
+        <img class="BI" src="./telecon.webp" alt="img">
+        <img class="BI" src="./studios.webp" alt="img">
+        <img class="BI" src="./nvidia.webp" alt="img">
+        <img class="BI" src="./sales.webp" alt="img">
+      </div>
+
+      <div style="display: flex; gap: 5px;" >
+        <img src="./star.webp" alt="img">
+        <img src="./star.webp" alt="img">
+        <img src="./star.webp" alt="img">
+        <img src="./star.webp" alt="img">
+        <img src="./star.webp" alt="img">
+        <p>4.5 stars and 1,059+ reviews</p>
+      </div>
+      </div>
         </div>
-        <div>
+
+
+
+
+        <div style="display: flex; flex: 1; justify-content: center; align-items: center; "  >
+            <div style="width: 500px; display: flex; flex-direction: column; gap: 20px; ">
+                <h1>Contact sales form</h1>
+                <p>Please fill out the form below to get started</p>
+
+                <label for="web"><b>Company Website </b></label>
+                <input id="web"  type="text" placeholder="100xdevs.exmaple"> 
+                 <label for="email"> <b>Company Email</b></label>
+                <input id="email" type="email" placeholder="xyz.com"> 
+
+                <div style="display: flex;  align-items: center; justify-content: space-between; ">
+                    <button style="background-color: black; color: white; border: none; border-radius: 40px; padding: 10px 15px;">Next</button>
+                    <div  style="justify-content: space-evenly; display: flex;">
+                    <div class="line" style="background-color: #1C1C1C;"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    </div>
+                </div>
+
+                
+            </div>
 
         </div>
     </div>
