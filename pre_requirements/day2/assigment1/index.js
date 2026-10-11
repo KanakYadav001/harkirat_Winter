@@ -67,3 +67,92 @@
 
 
 
+
+// function filterUser(user){
+//      let newarr = []
+
+
+//      for (let i = 0 ; i<user.length ; i++){
+//         if(user[i].age >= 18){
+//             newarr.push(user[i])
+//         }
+//      }
+
+
+//      return newarr
+// }
+
+
+// const user = [
+//     {
+//         user : "kanak yadav",
+//         age : 22
+
+//     },
+//     {
+//         user : "shubham yadav",
+//         age : 17
+
+//     },
+//     {
+//         user : "vaibhav yadav",
+//         age : 20
+
+//     },
+// ]
+
+
+// const allFilterUsers = filterUser(user)
+
+
+
+// console.log(allFilterUsers)
+
+
+
+
+// function filterUser(users){
+//     let newarr = [];
+
+//     for(let i = 0 ; i<users.length ; i++){
+//         if(users[i].age >=18 && users[i].gender == "male"){
+//             newarr.push(users[i])
+//         }
+//     }
+
+
+//     return newarr
+// }
+
+
+
+// const users = [
+//     {
+//         name : "kanak",
+//         age : 21,
+//         gender : "male",
+//     },
+//      {
+//         name : "Manthan",
+//         age : 24,
+//         gender : "male",
+//     },
+//      {
+//         name : "Vaibahv",
+//         age : 17,
+//         gender : "male",
+//     },
+//      {
+//         name : "radha",
+//         age : 21,
+//         gender : "female",
+//     }
+// ]
+
+
+
+// const allFilerUser = filterUser(users)
+
+
+
+// console.log(allFilerUser)
