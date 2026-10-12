@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "command": "^1.1.1",
+    "commander": "^15.0.0"
+  },
+  "name": "assigment2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index1.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
