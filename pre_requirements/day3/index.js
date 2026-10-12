@@ -18,13 +18,10 @@ const program = new Command();
 
   function readFile(filePath) {
     const absolutePath = path.resolve(filePath);
-    fs.readFile(absolutePath, 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading file:', err);
-        return;
-      }
-      console.log('File content:', data);
+   const content =  fs.readFileSync(absolutePath , 'utf8')
+    
+   const totalWords = content.split(/\s+/).length;
 
-    })
+   console.log(`Total words in the file: ${totalWords}`);
 
 }
