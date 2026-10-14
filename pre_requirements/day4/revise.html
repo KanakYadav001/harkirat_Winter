@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revise DOM </title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html , body{
+            height: 100%;
+            width: 100%;
+            display: flex; 
+            align-items: center;
+             justify-content: center;
+            flex-direction: column;
+  
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif 
+        }
+        div{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            
+            
+        }
+        span {
+            display: flex;
+            gap: 20px;
+        }
+    </style>
+
+</head>
+<body>
+    
+    <input id="input" type="text" placeholder="Enter Todo">
+    <button onclick="addToDo()" >Add Todo</button>
+
+
+    
+
+    <div id="allToDo" >
+      
+    </div>
+
+
+    <script>
+
+let Todoid = 1 ;
+
+function  addToDo() {
+        
+
+
+        let inputData = document.getElementById('input')
+        let allTodos = document.getElementById('allToDo')
+
+
+        if(inputData.value == " " || inputData.value == ""){
+                 return 
+        }
+
+
+        let data = inputData.value
+
+
+
+        
+
+
+      let span = document.createElement('span')
+      
+
+      span.innerText = data
+      span.id =  Todoid  
+
+      let button= document.createElement('button')
+      
+      button.innerText = "Delete Todo"
+
+
+      button.addEventListener('click' , function () {
+         deleteTodo(span.id)
+      })
+
+      span.appendChild(button)
+
+
+      allTodos.appendChild(span)
+     
+
+
+
+
+
+
+      
+
+
+     Todoid = Todoid+ 1
+
+      inputData.value = ""
+
+
+    }
+
+
+    function deleteTodo(id){
+        
+      let oneTodo = document.getElementById(id)
+
+      console.log(oneTodo)
+
+      oneTodo.remove()
+    }
+
+     
+
+
+
+    </script>
+
+</body>
+</html>
