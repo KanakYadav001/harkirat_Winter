@@ -1,0 +1,16 @@
+[
+    {
+
+     "path" : "b.txt",
+     "content" : "hello my name is kanak"
+
+    },
+    {
+      "path" : "b.json",
+      "content" : [{"name" : "kanak yadav" , "age" : 21}]
+    },
+    {
+      "path" : "b.py",
+      "content" : "hello"
+    }
+]
