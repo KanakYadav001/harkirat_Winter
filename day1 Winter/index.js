@@ -67,49 +67,100 @@
 
 // })
 
-const fs = require("fs");
+// const fs = require("fs");
 
-function createFileAndEdit(file, callBack) {
-  let count = 0;
-  fs.readFile(file, "utf-8", (err, data) => {
-    if (err) {
-      console.log("Error White Reading The File",err);
-    }else {
-      let  parseData = JSON.parse(data);
-      let arrLength = parseData.length
-      console.log(arrLength);
+// function createFileAndEdit(file, callBack) {
+//   let count = 0;
+//   fs.readFile(file, "utf-8", (err, data) => {
+//     if (err) {
+//       console.log("Error White Reading The File",err);
+//     }else {
+//       let  parseData = JSON.parse(data);
+//       let arrLength = parseData.length
+//       console.log(arrLength);
       
       
 
 
-     parseData.forEach(element => {
+//      parseData.forEach(element => {
 
-       const content =
-        typeof element.content === "string"
-          ? element.content
-          : JSON.stringify(element.content, null, 2);
-          
-        fs.writeFile(element.path, content, (err) => {
-          if (err) {
-            console.log("Error while writing the file",err);
-          } else {
+//        const content =
+//         typeof element.content === "string"
+//           ? element.content
+//           : JSON.stringify(element.content, null, 2);
+
+//         fs.writeFile(element.path, content, (err) => {
+//           if (err) {
+//             console.log("Error while writing the file",err);
+//           } else {
+//             count++;
+//             if (count == arrLength) {
+//               callBack();
+//             }
+//           }
+
+
+//         });
+//      });
+        
+        
+
+//     }
+//   });
+// }
+
+// createFileAndEdit("a.txt" , ()=>{
+//   console.log("Alll File Write Content Done");
+  
+// });
+
+
+
+const fs  = require('fs')
+
+
+
+function readFileAndWrite(file , callBack){
+  let count  = 0  ;
+  fs.readFile(file , 'utf-8' , (err , data)=>{
+    if(err){
+      console.log("Error while reading the file" , err);
+      
+    }
+    else{
+
+
+      let jsonData = JSON.parse(data)
+      let fileLength  = jsonData.length
+    
+
+      jsonData.forEach(element => {
+        
+        const content = typeof element.content== "string" ? element.content : JSON.stringify(element.content , null , 2)
+
+
+        fs.writeFile(element.path , content , (err)=>{
+          if(err) {
+            console.log("Error while writing the file");
+            
+          }else{
             count++;
-            if (count == arrLength) {
-              callBack();
+            if(count == fileLength  ){
+                     
+              callBack()
             }
           }
+        })
 
-
-        });
-     });
-        
-        
+      });
+       
 
     }
-  });
+  })
 }
 
-createFileAndEdit("a.txt" , ()=>{
-  console.log("Alll File Write Content Done");
+
+readFileAndWrite('a.txt' , () => {
+  console.log("All File Read Sucessfully");
   
-});
+})
