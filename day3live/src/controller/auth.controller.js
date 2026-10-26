@@ -2,7 +2,7 @@ import User from "../model/user.model.js";
 import jwt from "jsonwebtoken";
 
 import bcrypt from "bcryptjs";
-
+import { loginSchema, registerSchema } from "../validation/auth.validation.js";
 
 const register = async (req, res) => {
     try{
@@ -10,6 +10,10 @@ const register = async (req, res) => {
 
         const {name , email , password} = req.body;
 
+        const validation = registerSchema.safeParse({name , email , password})
+        if(!validation.success){
+            return res.status(400).json({message : "Validation error", error : validation.error.errors})
+        }
 
 
         const IsUserExist = await User.findOne({email})
@@ -47,7 +51,11 @@ const login = async (req, res) => {
     try {
 
         const {email , password} = req.body;
-
+   
+        const validation = loginSchema.safeParse({email , password})
+        if(!validation.success){
+            return res.status(400).json({message : "Validation error", error : validation.error.errors})
+        }
 
 
         const user = await User.findOne({email})
