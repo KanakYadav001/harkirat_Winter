@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 import wallet from '../model/walletEvent.model.js';
 import mongoose from 'mongoose';
 
+
+
 export const registerUser = async (req, res) => {
   try{
 
@@ -171,7 +173,7 @@ export const getTransaction= async (req, res) => {
     
     const id = req.user.id;
 
-    
+
 
     const transactions = await wallet.find({userId : id}).sort({date : -1});
 

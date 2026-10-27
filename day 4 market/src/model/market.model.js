@@ -27,9 +27,11 @@ const marketSchema = new mongoose.Schema({
     resoluction : {
         type : String,
         enum : ["Yes", "No", "null"],
-        default : "null"
+        default : null
     }
 
+}, {
+timestamps : true
 })
 
 const Market = mongoose.model("Market", marketSchema);
