@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import wallet from '../model/walletEvent.model.js';
 import mongoose from 'mongoose';
-
+import { onrampSchema , signinSchema , signupSchema } from '../middleware/validate.middleware.js';
 
 
 export const registerUser = async (req, res) => {
@@ -11,6 +11,15 @@ export const registerUser = async (req, res) => {
 
     const {username  , password } = req.body;
 
+    const validate = signupSchema.safeParse({
+      username , password
+    })
+
+    if(validate.error){
+       return res.status().json({
+          error : validate.error.message
+       })
+    }
 
     if(!username || !password){
         return res.status(400).json({message : "Please fill all the fields"})
@@ -59,6 +68,16 @@ export const loginUser = async (req, res) => {
   try{
     const {username , password } = req.body;
     
+    const validate = signinSchema.safeParse({
+        username,
+        password
+    })
+
+    if(validate.error){
+      return res.status(404).json({
+        errro  : validate.error.message
+      })
+    }
 
     const user = await User.findOne({username : username});
 
@@ -99,6 +118,18 @@ export const addFunds = async (req, res) => {
   try {
 
     const {id , amount} = req.body;
+
+
+
+    const validate  = onrampSchema.safeParse({
+      amount
+    })
+
+    if(validate.error){
+      return res.status(404).json({
+        error : validate.error.message
+      })
+    }
 
     if(!id || !amount){
         return res.status(400).json({message : "Please provide user id and amount"})

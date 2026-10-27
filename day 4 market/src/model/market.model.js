@@ -10,23 +10,23 @@ const marketSchema = new mongoose.Schema({
         type : Number,
         required : true
     },
-    slide :{
+    side :{
         type : String,
         required : true,
-        enum : ["Yes", "No"]
+        enum : ["yes", "no"]
     },
     createdBy : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "User",
         required : true
     },
-    expiresAt : {
+    expiry : {
         type : Date,
         required : true,
     },
-    resoluction : {
+   resolution : {
         type : String,
-        enum : ["Yes", "No", "null"],
+        enum : ["yes", "no", "null"],
         default : null
     }
 

@@ -3,20 +3,32 @@ import Market from "../model/market.model.js";
 import Bet from "../model/bet.model.js";
 import mongoose from "mongoose";
 import wallet from "../model/walletEvent.model.js";
+import { createMarketSchema  ,  placeBetSchema } from "../middleware/validate.middleware.js";
 
 export const createMarket = async (req, res) => {
   try {
     const id = req.user.id;
-    const { title, initialWager, slide, expiresAt } = req.body;
+    const { title, initialWager, side, expiry } = req.body;
 
-    if (!title || !initialWager || !slide || !expiresAt) {
+
+    const result  = createMarketSchema.safeParse({
+       title, initialWager, side, expiry
+    })
+
+    if(result.error){
+     return res.status(404).json({
+        error : result.error  })
+    }
+
+    if (!title || !initialWager || !side || !expiry) {
       return res.status(400).json({ message: "Please fill all the fields" });
     }
 
-    const [date, month, year] = expiresAt.split("/").map(Number);
+
+
+    const [date, month, year] = expiry.split("/").map(Number);
     const formatDate = new Date(Date.UTC(year, month - 1, date));
 
-    console.log("Formatted Date:", formatDate);
 
     if (formatDate <= new Date()) {
       return res.status(400).json({ message: "Please provide a valid date" });
@@ -25,9 +37,9 @@ export const createMarket = async (req, res) => {
     const newMarket = new Market({
       title: title,
       initialWager: initialWager,
-      slide: slide,
+      side: side,
       createdBy: id,
-      expiresAt: formatDate,
+      expiry: formatDate,
     });
 
     newMarket.save();
@@ -36,7 +48,7 @@ export const createMarket = async (req, res) => {
       .status(200)
       .json({ message: "Market created successfully", market: newMarket });
   } catch (error) {
-    console.log("Error creating market:", error.message);
+    console.log("Error creating market:", error);
     res.status(500).json({ message: "Error creating market" });
   }
 };
@@ -57,6 +69,16 @@ export const betMarket = async (req, res) => {
     const id = req.user.id;
 
     const { betAmount, marketId } = req.body;
+
+    const validate = placeBetSchema.validate({
+       marketId, betAmount
+    })
+
+    if(validate.error){
+      return res.status().json({
+        error : validate.error.message
+      })
+    }
 
     if (!betAmount || !marketId) {
       return res.status(400).json({ message: "Please fill all the fields" });
@@ -80,12 +102,12 @@ export const betMarket = async (req, res) => {
       return res.status(400).json({ message: "Market not found" });
     }
 
-    if (market.resoluction !== null) {
+    if (market.resolution !== null) {
       return res
         .status(400)
         .json({ message: "Market is already resolved you cannot place bet" });
     }
-    if (market.expiresAt <= new Date()) {
+    if (market.expiry <= new Date()) {
       return res
         .status(400)
         .json({ message: "Market is expired you cannot place bet" });

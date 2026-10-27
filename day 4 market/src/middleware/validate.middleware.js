@@ -1,4 +1,4 @@
-import zod  from "zod";
+import * as z from "zod"
 
 
 export const signupSchema = z.object({
@@ -19,12 +19,12 @@ export const createMarketSchema = z.object({
   title: z.string().min(3),
   initialWager: z.number().int().positive(),
   side: z.enum(["yes", "no"]),
-  expiry: z.coerce.date(),
+  expiry: z.string(),
 });
 
 export const placeBetSchema = z.object({
   marketId: z.string(),
-  amount: z.number().int().positive(),
+  betAmount: z.number().int().positive(),
 });
 
 export const resolveMarketSchema = z.object({
