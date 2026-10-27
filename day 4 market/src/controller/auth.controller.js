@@ -1,6 +1,8 @@
 import User from '../model/user.model.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import wallet from '../model/walletEvent.model.js';
+import mongoose from 'mongoose';
 
 export const registerUser = async (req, res) => {
   try{
@@ -53,10 +55,10 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try{
-    const {email , password } = req.body;
+    const {username , password } = req.body;
     
 
-    const user = await User.findOne({email : email});
+    const user = await User.findOne({username : username});
 
     if(!user){
         return res.status(400).json({message : "User not found"})
@@ -94,6 +96,41 @@ export const loginUser = async (req, res) => {
 export const addFunds = async (req, res) => {
   try {
 
+    const {id , amount} = req.body;
+
+    if(!id || !amount){
+        return res.status(400).json({message : "Please provide user id and amount"})
+    }
+
+    if(amount <= 0){
+        return res.status(400).json({message : "Amount should be greater than 0"})
+    }
+
+
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({message : "Invalid user id"})
+    }
+
+    const user = await User.findById(id );
+
+    if(!user){
+        return res.status(400).json({message : "User not found"})
+    }
+
+    const newWalletEvent = new wallet({
+        userId : id,
+        amount : amount,
+        tx_type : "onramp",
+        date : new Date()
+    })
+
+    await newWalletEvent.save();
+
+    user.amount += amount;
+
+    await user.save();
+
+    res.status(200).json({message : "Funds added successfully"})
 
 
   }catch (error) {
@@ -104,6 +141,20 @@ export const addFunds = async (req, res) => {
 
 export const getUserDetails = async (req, res) => {
   try {
+
+    const id = req.user.id;
+
+    const user = await User.findById(id);
+
+    if(!user){
+        return res.status(400).json({message : "User not found"})
+    }
+
+
+    res.status(200).json({user : user})
+
+
+
 
 
 
@@ -117,6 +168,14 @@ export const getUserDetails = async (req, res) => {
 
 export const getTransaction= async (req, res) => {
   try {
+    
+    const id = req.user.id;
+
+    
+
+    const transactions = await wallet.find({userId : id}).sort({date : -1});
+
+    res.status(200).json({transactions : transactions})
     
     
 

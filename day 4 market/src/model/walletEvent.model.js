@@ -13,7 +13,7 @@ const walletScema = new mongoose.Schema({
         required : true
     },
     external_id : {
-        type :mongoose.Schema.Types.Mixed
+        type : mongoose.Schema.Types.Mixed
     },
     amount : {
         type : Number,
