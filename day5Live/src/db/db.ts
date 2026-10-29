@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-async function ConnectToDB(req, res) {
+async function ConnectToDB(req :any , res : any) {
   try {
     await mongoose.connect(process.env.DB_URI);
 

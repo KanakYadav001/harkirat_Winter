@@ -17,11 +17,8 @@ export const onrampSchema = z.object({
 
 export const createMarketSchema = z.object({
   title: z.string().min(3),
-  initialWager: z.number().int().positive(),
-  side: z.enum(["yes", "no"]),
+  totalIssued: z.number().int().positive(),
   expiry: z.string(),
 });
 
 
-
-export default {signupSchema , signinSchema , onrampSchema}
