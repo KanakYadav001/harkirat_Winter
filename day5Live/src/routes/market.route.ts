@@ -1,24 +1,16 @@
+import express from "express";
 
-import express from 'express'
+import { marketController } from "../controllers/market.controller";
 
-import  { getMarkrt  , createMarket , createOrder  , getOrderBook } from '../controllers/market.controller'
+import { Middleware } from "../middleware/auth.middleware";
 
-import  { authMiddleware } from '../middleware/auth.middleware'
+const marketRoute = express.Router();
 
+marketRoute.use(Middleware.authMiddleware);
 
+marketRoute.post("/", marketController.createMarket);
+marketRoute.get("/", marketController.getMarkrt);
+marketRoute.post("/createOrder", marketController.createOrder);
+marketRoute.get("/orderBook", marketController.getOrderBook);
 
-
-const marketRoute = express.Router()
-
-
-
-marketRoute.post('/', authMiddleware , createMarket )
-marketRoute.get('/', getMarkrt )
-marketRoute.post('/createOrder', authMiddleware ,createOrder )
-marketRoute.get('/orderBook' ,getOrderBook )
-
-
-
-
-
-export default marketRoute
+export default marketRoute;

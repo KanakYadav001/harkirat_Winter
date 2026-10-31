@@ -21,6 +21,11 @@ const UserScema = new mongoose.Schema({
     lockBalance:{
         type : Number,
         default : 0
+    },
+    role :{
+        type : String,
+        enum : ['user','admin'],
+        refault : 'user'
     }
 } , { 
     timestamps : true

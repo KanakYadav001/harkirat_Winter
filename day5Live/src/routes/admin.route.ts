@@ -1,15 +1,10 @@
-import express from 'express'
-import {resolveMarket} from '../controllers/admin.controller'
-import { authMiddleware } from '../middleware/auth.middleware'
-const adminRoute = express.Router()
+import express from "express";
+import { adminController } from "../controllers/admin.controller";
+import { Middleware } from "../middleware/auth.middleware";
+const adminRoute = express.Router();
 
+adminRoute.use(Middleware.adminMiddleware);
 
+adminRoute.post("/resolve", adminController.resolveMarket);
 
-adminRoute.post('/resolve' , authMiddleware , resolveMarket)
-
-
-
-export default adminRoute
-
-
-
+export default adminRoute;

@@ -2,6 +2,7 @@ import {UserModel} from "../model/user.model";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import {Request , Response} from 'express'
 
 import {
   signupSchema,
@@ -9,7 +10,10 @@ import {
   onrampSchema,
 } from "../middleware/validation.middleware.ts";
 
-export const signup = async (req: any, res: any) => {
+
+export const  authController = {
+
+signup : async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
 
@@ -59,9 +63,9 @@ export const signup = async (req: any, res: any) => {
       message: "some Problem Occure While SignUp",
     });
   }
-};
+},
 
-export const signin = async (req: any, res: any) => {
+ signin : async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
 
@@ -113,11 +117,12 @@ export const signin = async (req: any, res: any) => {
       message: "Error occure while login ",
     });
   }
-};
+},
 
-export const addBalance = async (req: any, res: any) => {
+ addBalance : async (req: Request, res: Response) => {
   try {
-    const { id, amount } = req.body;
+    const id = req.user._id
+    const {amount}  = req.body
 
     const validate = onrampSchema.safeParse({
       amount,
@@ -155,9 +160,9 @@ export const addBalance = async (req: any, res: any) => {
   } catch (err) {
     res.status;
   }
-};
+},
 
-export const getProfile = async (req: any, res: any) => {
+ getProfile : async (req: Request, res: Response) => {
   try {
     const id = req.user._id;
 
@@ -180,10 +185,10 @@ export const getProfile = async (req: any, res: any) => {
       message: "Some error occure while fetching File",
     });
   }
-};
+},
 
 
-export const getBalance = async (req : any ,res : any)=>{
+getBalance : async (req : Request ,res : Response)=>{
   try{
 
     const id = req.user._id ;
@@ -214,3 +219,6 @@ export const getBalance = async (req : any ,res : any)=>{
      })
   }
 }
+
+}
+

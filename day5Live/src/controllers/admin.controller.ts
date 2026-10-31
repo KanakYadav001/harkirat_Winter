@@ -1,17 +1,24 @@
 import mongoose  from "mongoose"
 import {UserModel} from "../model/user.model"
 import { Ask } from "../model/Ask.model"
+import { Request  , Response } from 'express'
 
 
-export const resolveMarket = (req : any ,res : any)=>{
+export const adminController = {
+ 
+ resolveMarket : (req : Request ,res : Response)=>{
     try {
+     
+       
+
+
 
         const {marketId , side} = req.body
 
 
        if(!mongoose.Types.ObjectId.isValid(marketId)){
         return res.status(401).json({
-            message : ""
+            message : "invalid Market Id"
         })
        }
 
@@ -24,4 +31,6 @@ export const resolveMarket = (req : any ,res : any)=>{
            message : "Some problem Occure While Resolve The Market "
         })
     }
+}
+
 }

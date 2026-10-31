@@ -7,9 +7,13 @@ import { Bid } from "../model/Bid.model";
 import { Fill } from "../model/Fill.model.ts";
 import { StockBalance } from "../model/stockBalance.model.ts";
 import { wallet } from "../model/walletEvent.model.ts";
+import {Request , Response} from 'express'
+import { createMarketSchema } from "../middleware/validation.middleware.ts";
 
 
-export const createMarket = async (req: any, res: any) => {
+export const marketController = {
+
+ createMarket : async (req: Request, res: Response) => {
   try {
     const id = req.user._id;
 
@@ -67,11 +71,8 @@ export const createMarket = async (req: any, res: any) => {
       message: "Erorr while creating the market",
     });
   }
-};
-
-
-
-export const getMarkrt = async (req : any ,res : any ) => {
+},
+ getMarkrt : async (req : Request ,res : Response ) => {
 try {
 
     const market = await Market.find().sort({ createdAt: -1 }).lean()
@@ -88,13 +89,8 @@ try {
         message : "Error in during fetch Markrt"
     })
 }
-}
-
-
-
-
-
-export const createOrder = async (req:any , res:any) => {
+},
+ createOrder : async (req:Request , res:Response) => {
   
   try {
 
@@ -265,7 +261,7 @@ export const createOrder = async (req:any , res:any) => {
            {
 
             orderBookId : orderbook._id,
-            
+
 
            },{
 
@@ -309,12 +305,8 @@ export const createOrder = async (req:any , res:any) => {
   }
 
 
-};
-
-
-
-
-export const getOrderBook  = async (req:any, res :any) =>{
+},
+getOrderBook  : async (req:Request, res :Response) =>{
   try {
 
     const{ marketId ,  stockSide }= req.params
@@ -362,3 +354,6 @@ export const getOrderBook  = async (req:any, res :any) =>{
     })
   }
 }
+
+}
+

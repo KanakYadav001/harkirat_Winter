@@ -1,30 +1,20 @@
 import express from "express";
-import {
-  signup,
-  signin,
-  getProfile,
-  addBalance,
-  getBalance
-} from "../controllers/user.controller.ts";
+import { authController } from "../controllers/user.controller.ts";
 
-
-
-import { authMiddleware } from "../middleware/auth.middleware.ts";
-
-
+import { Middleware } from "../middleware/auth.middleware.ts";
 
 const authRoute = express.Router();
 
+authRoute.post("/auth/signup", authController.signup);
 
+authRoute.post("/auth/signin", authController.signin);
 
-authRoute.post("/auth/signup", signup);
+authRoute.use(Middleware.authMiddleware);
 
-authRoute.post("/auth/signin", signin);
+authRoute.get("/profile", authController.getProfile);
 
-authRoute.get("/profile", authMiddleware, getProfile);
+authRoute.post("/onramp", authController.addBalance);
 
-authRoute.post("/onramp", addBalance);
-
-authRoute.get('/balance' ,authMiddleware , getBalance)
+authRoute.get("/balance", authController.getBalance);
 
 export default authRoute;
