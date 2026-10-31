@@ -18,7 +18,7 @@ const UserScema = new mongoose.Schema({
         type : Number,
         default : 0
     },
-    investBalance:{
+    lockBalance:{
         type : Number,
         default : 0
     }
@@ -28,12 +28,12 @@ const UserScema = new mongoose.Schema({
 
 
 
-const UserModel = mongoose.model('User' , UserScema)
+export const UserModel = mongoose.model('User' , UserScema)
 
 
 
 
-export default UserModel
+
 
 
 

@@ -1,4 +1,4 @@
-import User from "../model/user.model";
+import {UserModel} from "../model/user.model";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
@@ -25,7 +25,7 @@ export const signup = async (req: any, res: any) => {
       });
     }
 
-    const IsUser = await User.findOne({
+    const IsUser = await UserModel.findOne({
       username,
     });
 
@@ -37,7 +37,7 @@ export const signup = async (req: any, res: any) => {
 
     const hashpassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
+    const user = await UserModel.create({
       username,
       password: hashpassword,
     });
@@ -77,7 +77,7 @@ export const signin = async (req: any, res: any) => {
       });
     }
 
-    const IsUser = await User.findOne({
+    const IsUser = await UserModel.findOne({
       username,
     });
 
@@ -135,7 +135,7 @@ export const addBalance = async (req: any, res: any) => {
       });
     }
 
-    const isUser = await User.findOne({
+    const isUser = await UserModel.findOne({
       _id: id,
     });
 
@@ -161,7 +161,7 @@ export const getProfile = async (req: any, res: any) => {
   try {
     const id = req.user._id;
 
-    const isUser = await User.findOne({
+    const isUser = await UserModel.findOne({
       _id: id,
     }).lean();
 
@@ -189,7 +189,7 @@ export const getBalance = async (req : any ,res : any)=>{
     const id = req.user._id ;
 
 
-    const user = await User.findOne({
+    const user = await UserModel.findOne({
       _id : id
     })
 

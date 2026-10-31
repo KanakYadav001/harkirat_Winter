@@ -16,8 +16,8 @@ const marketScema = new mongoose.Schema({
   },
   resolution : {
     type : String,
-    enum : ['yes' , 'no'],
-    default : 'no'
+    enum : ['yes' , 'no' , null],
+    default : null
   },
   expiry : {
     type : Date,
