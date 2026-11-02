@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { NextFunction } from "express";
-import { Request, Response } from "express";
+import type { NextFunction } from "express";
+import type { Request, Response } from "express";
 import adminRoute from "../routes/admin.route";
 
 

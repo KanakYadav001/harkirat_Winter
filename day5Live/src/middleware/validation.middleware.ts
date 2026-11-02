@@ -17,7 +17,6 @@ export const onrampSchema = z.object({
 
 export const createMarketSchema = z.object({
   title: z.string().min(3),
-  totalIssued: z.number().int().positive(),
   expiry: z.string(),
 });
 

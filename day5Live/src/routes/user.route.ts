@@ -17,4 +17,6 @@ authRoute.post("/onramp", authController.addBalance);
 
 authRoute.get("/balance", authController.getBalance);
 
+authRoute.get('/transaction', authController.getAllTransaction)
+
 export default authRoute;

@@ -7,8 +7,9 @@ import { Bid } from "../model/Bid.model";
 import { Fill } from "../model/Fill.model.ts";
 import { StockBalance } from "../model/stockBalance.model.ts";
 import { wallet } from "../model/walletEvent.model.ts";
-import {Request , Response} from 'express'
+import type {Request , Response} from 'express'
 import { createMarketSchema } from "../middleware/validation.middleware.ts";
+
 
 
 export const marketController = {
@@ -17,11 +18,10 @@ export const marketController = {
   try {
     const id = req.user._id;
 
-    const { title, totalIssued, expiry } = req.body;
+    const { title, expiry ,totalIssued  } = req.body;
 
     const validate = createMarketSchema.safeParse({
       title,
-      totalIssued,
       expiry
     });
 
@@ -48,8 +48,8 @@ export const marketController = {
     const market  = await Market.create({
          creatorId : id,
          title : title,
-         totalIssued : totalIssued,
-         expiry : fromatDate
+         expiry : fromatDate,
+         totalIssued : totalIssued
     })
 
      await orderBook.create([{
@@ -104,7 +104,7 @@ try {
       })
     }
 
-    const market = await marketId.findOne({
+    const market = await Market.findOne({
       _id : marketId
     })
 
@@ -124,7 +124,7 @@ try {
       })
     }
     const OrderBook = await orderBook.findOne({
-      _id : marketId, 
+       marketId : marketId, 
       stockSide : side
     })
 
@@ -224,13 +224,13 @@ try {
 
 
          await user.save();
-         await sellStock.save()
-         await seller.save()
+         await sellStock.save();
+         await seller.save();
 
 
 
          await StockBalance.findOneAndUpdate({
-            user._id,
+            id,
             marketId,
             side,
             matchQty
@@ -241,7 +241,7 @@ try {
           $inc : {qty : matchQty},
           $setOnInsert :{
             locked : 0
-          },
+          }
          },{
 
         upsert : true,
@@ -300,16 +300,164 @@ try {
 
     }else{
 
+  
 
-      const 
+      const sellerStockBalance = await StockBalance.findOne({
+        user_id : id ,
+        market_id :marketId,
+        side : side ,
+      })
+
+
+      if(!sellerStockBalance || sellerStockBalance.qty - sellerStockBalance.locked < qty){
+          return res.status(401).json({
+           message : "Inefficient Balance"
+          })
+      }
+
+
+      sellerStockBalance.locked +=qty
+
+
+     await sellerStockBalance.save()
+
+
+
+      const matchBids = await Bid.find({
+         orderBookId : OrderBook._id ,
+         userId : {$ne : id} ,
+          price : {$gte :amount} ,
+          qty : {$gt : 0},
+           stockSide : side
+
+      })
+
+      
+
+
+
+
+      for(const bid of matchBids){
+
+        if(remaningQty == 0 ) break
+
+
+        const buyUser = await UserModel.findOne({
+        _id : bid.userId
+      })
+
+
+      const buyUserStockBalance = await StockBalance.findOne({
+        user_id : bid.userId,
+        market_id: marketId,
+        side,
+      })
+     
+
+      const matchedOuantity  = Math.min(bid.qty ,remaningQty )
+
+
+
+      const actualTradePrice  = matchedOuantity * bid.price
+      
+      user.balance += actualTradePrice
+
+      buyUser.lockBalance -= actualTradePrice
+
+      buyUserStockBalance.qty += matchedOuantity
+      buyUserStockBalance.locked -= matchedOuantity
+    
+    
+      Filled += matchedOuantity
+
+       pendingOrder = remaningQty - matchedOuantity
+
+
+      remaningQty -= matchedOuantity
+     
+     
+
+
+      await user.save();
+      await buyUser.save()
+      await buyUserStockBalance.save()
+      
 
 
 
 
 
 
+      await StockBalance.findOneAndUpdate(
+        {
+           user_id : user._id  ,
+            market_id : marketId,
+             side : side,
+
+        },
+        {
+          $inc : {
+          qty : -matchedOuantity ,
+          locked : -matchedOuantity
+          }
+
+        }
+      )
+  
+    
 
 
+
+
+
+       await Fill.create([
+        {
+          orderBookId : OrderBook._id  ,
+           userId : id ,
+            price : bid.price ,
+             qty : matchedOuantity ,
+           type : 'sell' ,
+           isMaker : true , 
+        },
+        {
+          orderBookId : OrderBook._id ,
+           userId : buyUser._id  ,
+           price : bid.price,
+            qty : matchedOuantity ,
+           type : 'buy',
+            isMaker : false  , 
+
+
+        }
+      ])
+
+
+
+      bid.qty -=matchedOuantity
+
+      if(bid.qty == 0){
+        await Bid.findByIdAndDelete(bid._id)
+      }else{
+        await bid.save()
+      }
+
+
+
+
+
+      }
+
+      if(remaningQty>0){
+        await Ask.create({
+          userId : id,
+           orderBookId :OrderBook._id ,
+            price : amount,
+             qty :  remaningQty,
+             stockSide : side
+        })
+      }
+
+      
 
     }
 
@@ -329,7 +477,7 @@ try {
 getOrderBook  : async (req:Request, res :Response) =>{
   try {
 
-    const{ marketId ,  stockSide }= req.params
+    const { marketId ,  stockSide }= req.body
 
 
     if(!mongoose.Types.ObjectId.isValid(marketId)){
@@ -356,10 +504,9 @@ getOrderBook  : async (req:Request, res :Response) =>{
     res.status(200).json({
       message : "Order Book Fetch Sucessfully",
       buyers : allBid,
-      gap : "''''''''''''''''''''''''''''",
-      gap2 : "''''''''''''''''''''''''''''",
-      gap3 : "''''''''''''''''''''''''''''",
-      gap4 : "''''''''''''''''''''''''''''",
+       s :"''''''''''''''''''''''''''''",
+       ss :"''''''''''''''''''''''''''''",
+       sss :"''''''''''''''''''''''''''''",
       sellers : allAsk
     })
 

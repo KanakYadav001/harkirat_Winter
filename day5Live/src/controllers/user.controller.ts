@@ -2,20 +2,19 @@ import {UserModel} from "../model/user.model";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
-import {Request , Response} from 'express'
-
+import type { Request, Response } from 'express';
 import {
   signupSchema,
   signinSchema,
   onrampSchema,
 } from "../middleware/validation.middleware.ts";
-
+import { wallet } from "../model/walletEvent.model.ts";
 
 export const  authController = {
 
 signup : async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.body;
+    const { username, password  } = req.body;
 
     const validate = signupSchema.safeParse({
       username,
@@ -46,7 +45,7 @@ signup : async (req: Request, res: Response) => {
       password: hashpassword,
     });
 
-    const token = jwt.sign({ _id: user.id }, process.env.JWT_TOKEN, {
+    const token = jwt.sign({ _id: user.id , role : user.role }, process.env.JWT_TOKEN, {
       expiresIn: "7d",
     });
 
@@ -145,7 +144,7 @@ signup : async (req: Request, res: Response) => {
     });
 
     if (!isUser) {
-      return res.status(404).josn({
+      return res.status(404).json({
         message: "User Not Find Enter Correct User Id",
       });
     }
@@ -153,6 +152,14 @@ signup : async (req: Request, res: Response) => {
     isUser.balance += amount;
 
     await isUser.save();
+
+
+
+    await wallet.create({
+      userId  : id,
+      type : 'onramp',
+      amount  : amount
+    })
 
     res.status(200).json({
       message: "Balance Sucessfull Added",
@@ -217,6 +224,37 @@ getBalance : async (req : Request ,res : Response)=>{
             message : "some problem occure while fetch the balance"
         
      })
+  }
+},
+
+
+getAllTransaction : async (req : Request , res : Response) =>{
+  try {
+
+    const id  = req.user._id
+
+    const allTransaction  = await wallet.find({
+         userId : id
+    }).lean()
+
+
+    if(allTransaction.length == 0 ){
+       return res.status(403).json({
+        message  : "No history present"
+       })
+    }
+
+
+
+    res.status(200).json({
+      message  :"All transaction Fetch Sucessfully",
+      allTransaction
+    })
+
+  }catch(err){
+    res.status(501).json({
+      message : "Error while fetch all the transaction"
+    })
   }
 }
 
