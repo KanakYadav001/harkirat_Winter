@@ -135,9 +135,9 @@ try {
     }
 
     
-    const remaningQty = qty ;
-    const Filled  = 0 ;
-    const pendingOrder = null
+    let remaningQty = qty ;
+    let Filled  = 0 ;
+    let pendingOrder = null
    
 
 
@@ -242,17 +242,11 @@ try {
           $setOnInsert :{
             locked : 0
           },
-
-
-
          },{
 
         upsert : true,
         new : true,
         runValidators : true
-
-
-
          })
 
 
@@ -260,30 +254,56 @@ try {
          await Fill.create([
            {
 
-            orderBookId : orderbook._id,
-
+                orderBookId : OrderBook._id,
+                     userId : seller._id ,
+                     price : exePrice  ,
+                     qty : matchQty,
+                      type : "sell",
+                      isMaker : true
 
            },{
-
-
-
-
+               orderBookId : OrderBook._id,
+                     userId : user._id ,
+                     price : exePrice  ,
+                     qty : matchQty,
+                      type : "buy",
+                      isMaker : false
            }
          ])
 
+         ask.qty -=matchQty;
+
+
+         if(ask.qty == 0 ){
+             await Ask.deleteOne({_id : ask._id});
+         }else {
+          await ask.save();
+         }
+
+
+         remaningQty -=matchQty;
+           Filled +=matchQty
 
 
 
-
-
-
-
-
-
+           if(remaningQty > 0){
+            await Bid.create({
+              orderBookId : OrderBook._id ,
+              userId : user._id,
+               price : amount,
+               qty : remaningQty,
+               stockSide : side ,
+            })
+           }
       }
 
 
     }else{
+
+
+      const 
+
+
 
 
 
