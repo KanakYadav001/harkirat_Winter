@@ -251,6 +251,13 @@ try {
 
 
 
+         await wallet.create({
+           userId : id,
+           amount : exePrice,
+           type : 'bet'
+         })
+
+
          await Fill.create([
            {
 
@@ -401,11 +408,20 @@ try {
           locked : -matchedOuantity
           }
 
-        }
+        },{
+
+        upsert : true,
+        new : true,
+        runValidators : true
+         }
       )
   
     
-
+        await wallet.create({
+           userId : id,
+           amount :actualTradePrice ,
+           type : 'bet'
+         })
 
 
 
@@ -433,7 +449,7 @@ try {
 
 
 
-      bid.qty -=matchedOuantity
+      bid.qty -= matchedOuantity
 
       if(bid.qty == 0){
         await Bid.findByIdAndDelete(bid._id)
@@ -467,7 +483,7 @@ try {
       message : "Order execute Sucessfully"
     })
   }catch(err){
-    res.status(501).josn({
+    res.status(501).json({
       message : "error While Creating Order"
     })
   }
